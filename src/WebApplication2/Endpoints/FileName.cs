@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FluentValidation;
 
 namespace WebApplication2.Endpoints;
 
@@ -13,6 +14,16 @@ public record MyResponse
 {
     public required string FullName { get; init; }
     public bool IsOver18 { get; init; }
+}
+
+public class MyValidator : Validator<MyRequest>
+{
+    public MyValidator()
+    {
+        RuleFor(x => x.FirstName).NotEmpty();
+        RuleFor(x => x.LastName).NotEmpty();
+        RuleFor(x => x.Age).GreaterThan(0);
+    }
 }
 
 public class MyEndpoint : Endpoint<MyRequest, MyResponse>
